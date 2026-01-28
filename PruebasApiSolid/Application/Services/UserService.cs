@@ -59,5 +59,18 @@ namespace PruebasApiSolid.Application.Services
             if (response == null) throw new NotFoundException();
             await _userRepository.DeleteUser(response);
         }
+
+        public async Task<ResponseUser> UpdateUser(Guid id, UpdateRequestUser request)
+        {
+            var response = await _userRepository.GetId(id);
+            if (response == null) throw new NotFoundException();
+
+             response.UpdateEmailUser(request.Email);
+
+            await _userRepository.UpdateUser(response);
+
+            return new ResponseUser { Name = response.Name, Email = request.Email, };
+
+        }
     }
 }

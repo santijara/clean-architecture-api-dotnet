@@ -12,5 +12,7 @@ namespace PruebasApiSolid.Application.Interfaces
         Task<ResponseUser> CreateUser(RequestUser requestUser);
 
         Task DeleteUser(Guid id);
+
+        Task<ResponseUser> UpdateUser(Guid id, UpdateRequestUser requestUser);
     }
 }

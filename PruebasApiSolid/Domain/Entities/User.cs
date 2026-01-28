@@ -14,9 +14,7 @@ namespace PruebasApiSolid.Domain.Entities
 
         public User(string name, string email, string password)
         {
-            if(string.IsNullOrEmpty(name)) throw new DomainExceptions("Nombre Invalido");
-            if (string.IsNullOrEmpty(email)) throw new DomainExceptions("Email Invalido");
-            if (string.IsNullOrEmpty(password)) throw new DomainExceptions("Password Invalido");
+            Validate(name, email, password);
 
             Name = name;
             Email = email;
@@ -25,5 +23,26 @@ namespace PruebasApiSolid.Domain.Entities
         }
 
         public void NoIsActivated() => IsActivate = false;
+
+        public void UpdateEmailUser(string email)
+        {
+            if (string.IsNullOrWhiteSpace(email))
+                throw new DomainExceptions("Email inválido");
+           
+            Email = email;
+            
+        }
+
+        private static void Validate(string name, string email, string password)
+        {
+            if (string.IsNullOrWhiteSpace(name))
+                throw new DomainExceptions("Nombre inválido");
+
+            if (string.IsNullOrWhiteSpace(email))
+                throw new DomainExceptions("Email inválido");
+
+            if (string.IsNullOrWhiteSpace(password))
+                throw new DomainExceptions("Password inválido");
+        }
     }
 }

@@ -48,5 +48,13 @@ namespace PruebasApiSolid.Controllers
             return Ok(ApiResponse<string>.Ok("Usuario Eliminado"));
         }
 
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateUser(Guid id, UpdateRequestUser user)
+        {
+            var response =  await _userService.UpdateUser(id, user);
+
+            return Ok(ApiResponse<ResponseUser>.Ok(response));
+        }
+
     }
 }

@@ -37,5 +37,11 @@ namespace PruebasApiSolid.Infrastructure.Persistance
              _dataBaseContext.users.Remove(user);
              await _dataBaseContext.SaveChangesAsync();
         }
+
+        public async Task UpdateUser(User user)
+        {
+            _dataBaseContext.users.Update(user);
+            await _dataBaseContext.SaveChangesAsync();
+        }
     }
 }
