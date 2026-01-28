@@ -9,5 +9,7 @@ namespace PruebasApiSolid.Application.Interfaces
 
         Task<User?> GetId(Guid Id);
         Task CreateUser(User request);
+
+        Task DeleteUser(User Id);
     }
 }

@@ -38,5 +38,15 @@ namespace PruebasApiSolid.Controllers
             var response = await _userService.CreateUser(request);
             return Ok(ApiResponse<ResponseUser>.Ok(response));
         }
+
+        [HttpDelete("{id}")]
+
+        public async Task<IActionResult> DeleteUSer(Guid id)
+        {
+            await _userService.DeleteUser(id);
+
+            return Ok(ApiResponse<string>.Ok("Usuario Eliminado"));
+        }
+
     }
 }
