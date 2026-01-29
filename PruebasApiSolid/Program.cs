@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using PruebasApiSolid.Application.Common;
 using PruebasApiSolid.Application.Interfaces;
 using PruebasApiSolid.Application.Services;
+using PruebasApiSolid.Application.Users.Commands.CreateUser;
 using PruebasApiSolid.Application.Validators;
 using PruebasApiSolid.Domain.Entities;
 using PruebasApiSolid.Extensions;
@@ -28,6 +29,11 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddValidatorsFromAssemblyContaining<CreateUserRequestValidator>();
 builder.Services.AddApiBehavior();
+
+builder.Services.AddMediatR(cfg =>
+    cfg.RegisterServicesFromAssembly(typeof(CreateUserCommand).Assembly)
+);
+
 
 builder.Services.AddDbContext<AppDataBaseContext>(options =>
     options.UseSqlServer(

@@ -1,8 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using MediatR;
+using Microsoft.AspNetCore.Components.Forms;
+using Microsoft.AspNetCore.Mvc;
 using PruebasApiSolid.Application.Common;
 using PruebasApiSolid.Application.Dtos;
 using PruebasApiSolid.Application.Interfaces;
+using PruebasApiSolid.Application.Users.Commands.CreateUser;
+using PruebasApiSolid.Application.Users.Queries.GetAllUsers;
 using System.Threading.Tasks;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace PruebasApiSolid.Controllers
 {
@@ -10,50 +15,50 @@ namespace PruebasApiSolid.Controllers
     [Route("[controller]")]
     public class UserController : ControllerBase
     {
-        private readonly IUserService _userService;
+        private readonly IMediator _mediator;
 
-        public UserController(IUserService userService)
+        public UserController(IMediator mediator)
         {
-            _userService = userService;
+            _mediator = mediator;
         }
      
         [HttpGet]
         public  async Task<IActionResult> GetAll()
         {
-            var response = await _userService.GetAll();
-            return Ok(ApiResponse<IEnumerable<ResponseUser>>.Ok(response));
+            var result = await _mediator.Send(new GetAllUsersQuery());
+            return Ok(ApiResponse<object>.Ok(result));
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(Guid id)
         {
-            var response = await _userService.GetId(id);
+            //var response = await _userService.GetId(id);
 
-            return Ok(ApiResponse<ResponseUser>.Ok(response));
+            return Ok("OK");
         }
 
         [HttpPost]
-        public async Task<IActionResult>  CreateUser(RequestUser request)
+        public async Task<IActionResult>  CreateUser(CreateUserCommand request)
         {
-            var response = await _userService.CreateUser(request);
-            return Ok(ApiResponse<ResponseUser>.Ok(response));
+            var result = await _mediator.Send(request);
+            return Ok(ApiResponse<object>.Ok(result));
         }
 
         [HttpDelete("{id}")]
 
         public async Task<IActionResult> DeleteUSer(Guid id)
         {
-            await _userService.DeleteUser(id);
+            //await _userService.DeleteUser(id);
 
-            return Ok(ApiResponse<string>.Ok("Usuario Eliminado"));
+            return Ok("OK");
         }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateUser(Guid id, UpdateRequestUser user)
         {
-            var response =  await _userService.UpdateUser(id, user);
+            //var response =  await _userService.UpdateUser(id, user);
 
-            return Ok(ApiResponse<ResponseUser>.Ok(response));
+            return Ok("OK");
         }
 
     }
