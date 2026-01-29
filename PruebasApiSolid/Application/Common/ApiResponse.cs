@@ -16,12 +16,13 @@
             };
         }
 
-        public static ApiResponse<string>Fail(string message)
+        public static ApiResponse<Object>Fail(string message, object? data = null)
         {
-            return new ApiResponse<string>
+            return new ApiResponse<Object>
             {
                 State = false,
-                Message = message
+                Message = message,
+                Data = data
             };
         }
     }

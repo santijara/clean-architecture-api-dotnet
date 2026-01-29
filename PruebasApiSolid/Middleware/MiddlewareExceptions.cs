@@ -1,8 +1,9 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using FluentValidation;
+using Microsoft.Extensions.Logging;
 using PruebasApiSolid.Application.Common;
 using PruebasApiSolid.Application.Common.Exceptions;
 using PruebasApiSolid.Domain.Exceptions;
-using System.ComponentModel.DataAnnotations;
+
 
 namespace PruebasApiSolid.Middleware
 {
@@ -39,27 +40,28 @@ namespace PruebasApiSolid.Middleware
             {
                 NotFoundException => (
                     StatusCodes.Status404NotFound,
-                    ApiResponse<string>.Fail(ex.Message)
+                    ApiResponse<Object>.Fail(ex.Message)
                 ),
 
+              
                 ValidationExceptions => (
                     StatusCodes.Status400BadRequest,
-                    ApiResponse<string>.Fail(ex.Message)
+                    ApiResponse<Object>.Fail(ex.Message)
                 ),
 
                 ConflictExceptions => (
                     StatusCodes.Status409Conflict,
-                    ApiResponse<string>.Fail(ex.Message)
+                    ApiResponse<Object>.Fail(ex.Message)
                 ),
 
                 DomainExceptions => (
                     StatusCodes.Status422UnprocessableEntity,
-                    ApiResponse<string>.Fail(ex.Message)
+                    ApiResponse<Object>.Fail(ex.Message)
                 ),
 
                 _ => (
                     StatusCodes.Status500InternalServerError,
-                    ApiResponse<string>.Fail("Error interno del servidor")
+                    ApiResponse<Object>.Fail("Error interno del servidor")
                 )
             };
 

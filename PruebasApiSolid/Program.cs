@@ -1,11 +1,18 @@
+using FluentValidation;
+using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using PruebasApiSolid.Application.Common;
 using PruebasApiSolid.Application.Interfaces;
 using PruebasApiSolid.Application.Services;
+using PruebasApiSolid.Application.Validators;
 using PruebasApiSolid.Domain.Entities;
+using PruebasApiSolid.Extensions;
 using PruebasApiSolid.Infrastructure;
 using PruebasApiSolid.Infrastructure.Persistance;
 using PruebasApiSolid.Middleware;
 using System;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Model;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +25,9 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 
+builder.Services.AddFluentValidationAutoValidation();
+builder.Services.AddValidatorsFromAssemblyContaining<CreateUserRequestValidator>();
+builder.Services.AddApiBehavior();
 
 builder.Services.AddDbContext<AppDataBaseContext>(options =>
     options.UseSqlServer(

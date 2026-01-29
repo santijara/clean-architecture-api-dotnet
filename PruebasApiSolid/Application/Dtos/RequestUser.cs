@@ -1,10 +1,13 @@
 ﻿namespace PruebasApiSolid.Application.Dtos
 {
-    public class RequestUser
-    {
-        public string Name { get; set; }
-        public string Email { get; set; }
-        public string Password { get; set; }
+    public record RequestUser(
 
-    }
+        string Name,
+        string Password,
+        string Email
+        
+        );
+    
+
+    
 }
