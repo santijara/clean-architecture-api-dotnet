@@ -5,10 +5,8 @@ namespace PruebasApiSolid.Application.Users.Commands.UpdateUser
 {
     public record UpdateUserCommand(
         
-        string Name,
-        string Email,
-        string Password
-        
+        Guid Id,
+        string Email     
         ): IRequest<ResponseUser>;
     
 }

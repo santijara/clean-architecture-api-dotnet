@@ -1,10 +1,12 @@
-﻿using MediatR;
+﻿using Azure.Core;
+using MediatR;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Mvc;
 using PruebasApiSolid.Application.Common;
 using PruebasApiSolid.Application.Dtos;
 using PruebasApiSolid.Application.Interfaces;
 using PruebasApiSolid.Application.Users.Commands.CreateUser;
+using PruebasApiSolid.Application.Users.Commands.UpdateUser;
 using PruebasApiSolid.Application.Users.Queries.GetAllUsers;
 using System.Threading.Tasks;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
@@ -53,12 +55,11 @@ namespace PruebasApiSolid.Controllers
             return Ok("OK");
         }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateUser(Guid id, UpdateRequestUser user)
+        [HttpPut("Update")]
+        public async Task<IActionResult> UpdateUser(UpdateUserCommand user)
         {
-            //var response =  await _userService.UpdateUser(id, user);
-
-            return Ok("OK");
+            var result = await _mediator.Send(user);
+            return Ok(ApiResponse<object>.Ok(result));
         }
 
     }
