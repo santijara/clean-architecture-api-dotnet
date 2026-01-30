@@ -3,6 +3,7 @@ using PruebasApiSolid.Application.Interfaces;
 using PruebasApiSolid.Domain.Entities;
 using BCrypt.Net;
 using PruebasApiSolid.Application.Common.Exceptions;
+using PruebasApiSolid.Application.Common;
 namespace PruebasApiSolid.Application.Services
 {
     public class UserService: IUserService
@@ -15,18 +16,20 @@ namespace PruebasApiSolid.Application.Services
         }
   
 
-        public async Task<ResponseUser> GetId(Guid id)
+        public async Task<Result<ResponseUser>> GetId(Guid id)
         {
-            var response = await _userRepository.GetId(id);
+            var user = await _userRepository.GetId(id);
 
-            if (response == null) throw new NotFoundException();
+            if (user == null)
+                return Result<ResponseUser>.Failure("Usurio no encontrado");
 
+             var response = new ResponseUser
+             {
+                 Name = user.Name,
+                 Email = user.Email,
+             };
 
-            return new ResponseUser
-            {
-                Name = response.Name,
-                Email = response.Email,
-            };
+            return Result<ResponseUser>.Success(response);
         }
     }
 }

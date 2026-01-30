@@ -31,7 +31,11 @@ namespace PruebasApiSolid.Controllers
         public  async Task<IActionResult> GetAll()
         {
             var result = await _mediator.Send(new GetAllUsersQuery());
-            return Ok(ApiResponse<object>.Ok(result));
+
+            if (result.IsFailure)
+                return NotFound(ApiResponse<string>.Fail(result.Error));
+
+            return Ok(ApiResponse<IEnumerable<ResponseUser>>.Ok(result.Value));
         }
 
         [HttpGet("{id}")]
@@ -39,31 +43,45 @@ namespace PruebasApiSolid.Controllers
         {
             var result = await _User.GetId(id);
 
-            return Ok(ApiResponse<ResponseUser>.Ok(result));
+            if (result.IsFailure)
+                return NotFound(ApiResponse<ResponseUser>.Fail(result.Error));
+
+            return Ok(ApiResponse<ResponseUser>.Ok(result.Value));
         }
 
         [HttpPost]
         public async Task<IActionResult>  CreateUser(CreateUserCommand request)
         {
             var result = await _mediator.Send(request);
-            return Ok(ApiResponse<object>.Ok(result));
+            if (result.IsFailure)
+                return BadRequest(ApiResponse<string>.Fail(result.Error));
+
+            return Created(string.Empty,ApiResponse<ResponseUser>.Ok(result.Value)
+     );
         }
 
-        [HttpDelete("Delete")]
+        [HttpDelete("{id}")]
 
-        public async Task<IActionResult> DeleteUSer(DeleteUserCommand id)
+        public async Task<IActionResult> DeleteUser(Guid id)
         {
-            var result = await _mediator.Send(id);
+            var command = new DeleteUserCommand(id);
+            var result = await _mediator.Send(command);
+            if (result.IsFailure)
+                return NotFound(ApiResponse<string>.Fail(result.Error));
+            return Ok(ApiResponse<string>.Ok("Usuario eliminado correctamente"));
 
-            return Ok(ApiResponse<ResponseDeleteUser>.Ok(result));
         }
 
-        [HttpPut("Update")]
-        public async Task<IActionResult> UpdateUser(UpdateUserCommand user)
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateUser(Guid id, UpdateRequestUser request)
         {
-            var result = await _mediator.Send(user);
-            return Ok(ApiResponse<object>.Ok(result));
+            var command = new UpdateUserCommand(id, request.Email);
+            var result = await _mediator.Send(command);
+            if (result.IsFailure)
+                return NotFound(ApiResponse<string>.Fail(result.Error));
+            return Ok(ApiResponse<ResponseUser>.Ok(result.Value));
         }
+
 
     }
 }

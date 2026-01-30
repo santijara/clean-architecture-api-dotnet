@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using PruebasApiSolid.Application.Common;
 using PruebasApiSolid.Application.Dtos;
 
 namespace PruebasApiSolid.Application.Users.Commands.CreateUser
@@ -7,5 +8,5 @@ namespace PruebasApiSolid.Application.Users.Commands.CreateUser
     string Name,
     string Email,
     string Password
-) : IRequest<ResponseUser>;
+) : IRequest<Result<ResponseUser>>;
 }

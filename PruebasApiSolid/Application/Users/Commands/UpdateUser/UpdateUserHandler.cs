@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using PruebasApiSolid.Application.Common;
 using PruebasApiSolid.Application.Common.Exceptions;
 using PruebasApiSolid.Application.Dtos;
 using PruebasApiSolid.Application.Interfaces;
@@ -7,7 +8,7 @@ using PruebasApiSolid.Infrastructure.Persistance;
 
 namespace PruebasApiSolid.Application.Users.Commands.UpdateUser
 {
-    public class UpdateUserHandler: IRequestHandler<UpdateUserCommand, ResponseUser>
+    public class UpdateUserHandler: IRequestHandler<UpdateUserCommand, Result<ResponseUser>>
     {
         private readonly IUserRepository _userRepository;
 
@@ -16,20 +17,23 @@ namespace PruebasApiSolid.Application.Users.Commands.UpdateUser
             _userRepository = userRepository;
         }
 
-        public async Task<ResponseUser> Handle(UpdateUserCommand command, CancellationToken cancellationToken)
+        public async Task<Result<ResponseUser>> Handle(UpdateUserCommand command, CancellationToken cancellationToken)
         {
-            var response = await _userRepository.GetId(command.Id);
-            if (response == null) throw new NotFoundException();
+            var user = await _userRepository.GetId(command.Id);
+            if (user == null) 
+              return Result<ResponseUser>.Failure("Usuario no existe");
 
-            response.UpdateEmailUser(command.Email);
+            user.UpdateEmailUser(command.Email);
 
-            await _userRepository.UpdateUser(response);
+            await _userRepository.UpdateUser(user);
 
-            return new ResponseUser
+            var response = new ResponseUser
             {
-                Email = command.Email,
-                Name = response.Name
+                Email = user.Email,
+                Name = user.Name
             };
+
+            return Result<ResponseUser>.Success(response);
         }
     }
 }

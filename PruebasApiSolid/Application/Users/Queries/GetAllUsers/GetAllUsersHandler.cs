@@ -1,11 +1,12 @@
 ﻿using MediatR;
+using PruebasApiSolid.Application.Common;
 using PruebasApiSolid.Application.Dtos;
 using PruebasApiSolid.Application.Interfaces;
 
 namespace PruebasApiSolid.Application.Users.Queries.GetAllUsers
 {
     public class GetAllUsersHandler
-    : IRequestHandler<GetAllUsersQuery, IEnumerable<ResponseUser>>
+    : IRequestHandler<GetAllUsersQuery,Result<IEnumerable<ResponseUser>>>
     {
         private readonly IUserRepository _userRepository;
 
@@ -14,17 +15,21 @@ namespace PruebasApiSolid.Application.Users.Queries.GetAllUsers
             _userRepository = userRepository;
         }
 
-        public async Task<IEnumerable<ResponseUser>> Handle(
-            GetAllUsersQuery request,
-            CancellationToken cancellationToken)
+        public async Task<Result<IEnumerable<ResponseUser>>> Handle(GetAllUsersQuery request, CancellationToken cancellationToken)
         {
             var users = await _userRepository.GetAll();
+            if (!users.Any())
+                return Result<IEnumerable<ResponseUser>>.Failure("No hay usuarios registrados");
 
-            return users.Select(u => new ResponseUser
+
+            var response = users.Select(user => new ResponseUser
             {
-                Name = u.Name,
-                Email = u.Email
+                Name = user.Name,
+                Email = user.Email
             });
+
+            return Result<IEnumerable<ResponseUser>>.Success(response);
+
         }
     }
 

@@ -1,10 +1,11 @@
-﻿using PruebasApiSolid.Application.Dtos;
+﻿using PruebasApiSolid.Application.Common;
+using PruebasApiSolid.Application.Dtos;
 using PruebasApiSolid.Domain.Entities;
 
 namespace PruebasApiSolid.Application.Interfaces
 {
     public interface IUserService
     {
-        Task<ResponseUser> GetId(Guid id);    
+        Task<Result<ResponseUser>> GetId(Guid id);    
     }
 }

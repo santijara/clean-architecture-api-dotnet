@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using PruebasApiSolid.Application.Common;
 using PruebasApiSolid.Application.Dtos;
 
 namespace PruebasApiSolid.Application.Users.Commands.UpdateUser
@@ -7,6 +8,6 @@ namespace PruebasApiSolid.Application.Users.Commands.UpdateUser
         
         Guid Id,
         string Email     
-        ): IRequest<ResponseUser>;
+        ): IRequest<Result<ResponseUser>>;
     
 }
