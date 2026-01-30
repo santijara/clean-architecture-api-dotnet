@@ -6,4 +6,10 @@
         public string Email { get; set; }
     }
 
+
+    public class ResponseDeleteUser
+    {
+        public string Message { get; set; }
+    }
+
 }

@@ -61,7 +61,7 @@ namespace PruebasApiSolid.Middleware
 
                 _ => (
                     StatusCodes.Status500InternalServerError,
-                    ApiResponse<Object>.Fail("Error interno del servidor")
+                    ApiResponse<Object>.Fail(ex.Message)
                 )
             };
 

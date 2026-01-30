@@ -6,6 +6,7 @@ using PruebasApiSolid.Application.Common;
 using PruebasApiSolid.Application.Dtos;
 using PruebasApiSolid.Application.Interfaces;
 using PruebasApiSolid.Application.Users.Commands.CreateUser;
+using PruebasApiSolid.Application.Users.Commands.DeleteUser;
 using PruebasApiSolid.Application.Users.Commands.UpdateUser;
 using PruebasApiSolid.Application.Users.Queries.GetAllUsers;
 using System.Threading.Tasks;
@@ -18,10 +19,12 @@ namespace PruebasApiSolid.Controllers
     public class UserController : ControllerBase
     {
         private readonly IMediator _mediator;
+        private readonly IUserService _User;
 
-        public UserController(IMediator mediator)
+        public UserController(IMediator mediator, IUserService service)
         {
             _mediator = mediator;
+            _User = service;
         }
      
         [HttpGet]
@@ -34,9 +37,9 @@ namespace PruebasApiSolid.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(Guid id)
         {
-            //var response = await _userService.GetId(id);
+            var result = await _User.GetId(id);
 
-            return Ok("OK");
+            return Ok(ApiResponse<ResponseUser>.Ok(result));
         }
 
         [HttpPost]
@@ -46,13 +49,13 @@ namespace PruebasApiSolid.Controllers
             return Ok(ApiResponse<object>.Ok(result));
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("Delete")]
 
-        public async Task<IActionResult> DeleteUSer(Guid id)
+        public async Task<IActionResult> DeleteUSer(DeleteUserCommand id)
         {
-            //await _userService.DeleteUser(id);
+            var result = await _mediator.Send(id);
 
-            return Ok("OK");
+            return Ok(ApiResponse<ResponseDeleteUser>.Ok(result));
         }
 
         [HttpPut("Update")]
