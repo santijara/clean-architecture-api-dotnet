@@ -24,8 +24,8 @@ namespace PruebasApiSolid.Application.Users.Queries.GetAllUsers
 
             var response = users.Select(user => new ResponseUser
             {
-                Name = user.Name,
-                Email = user.Email
+                Name = user.Name.Value,
+                Email = user.Email.Value
             });
 
             return Result<IEnumerable<ResponseUser>>.Success(response);

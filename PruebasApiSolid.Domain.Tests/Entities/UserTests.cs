@@ -17,10 +17,14 @@ namespace PruebasApiSolid.Domain.Tests.Entities
         public void Constructor_ShouldCreateUser_WhenDataIsValid()
         {
             // Act
+            var name = new Name("Juan");
+            var correo = new Email("old@email.com");
+            var password = new PasswordHash("123456");
+
             var user = new User(
-                "Juan",
-                "juan@mail.com",
-                "123456"
+                name,
+                correo,
+                password
             );
 
             // Assert
@@ -34,10 +38,13 @@ namespace PruebasApiSolid.Domain.Tests.Entities
         public void Constructor_ShouldThrowException_WhenNameIsEmpty()
         {
             // Act
+            var name = new Name("");
+            var correo = new Email("old@email.com");
+            var password = new PasswordHash("123456");
             var act = () => new User(
-                "",
-                "mail@mail.com",
-                "123"
+                name,
+                correo,
+                password
             );
 
             // Assert
@@ -50,10 +57,13 @@ namespace PruebasApiSolid.Domain.Tests.Entities
         public void Constructor_ShouldThrowException_WhenEmailIsInvalid()
         {
             // Act
+            var name = new Name("");
+            var correo = new Email("old@email.com");
+            var password = new PasswordHash("123456");
             var act = () => new User(
-                "Pedro",
-                "correo-invalido",
-                "123"
+                name,
+                correo,
+                password
             );
 
             // Assert
@@ -66,31 +76,37 @@ namespace PruebasApiSolid.Domain.Tests.Entities
         public void UpdateEmailUser_ShouldUpdateEmail_WhenValid()
         {
             // Arrange
+            var name = new Name("");
+            var correo = new Email("old@email.com");
+            var password = new PasswordHash("123456");
             var user = new User(
-                "Ana",
-                "old@mail.com",
-                "123"
+                name,
+                correo,
+               password
             );
 
             // Act
-            user.UpdateEmailUser("new@mail.com");
+            user.UpdateEmailUser(correo);
 
             // Assert
-            user.Email.Should().Be("new@mail.com");
+            user.Email.Should().Be(correo);
         }
 
         [Fact]
         public void UpdateEmailUser_ShouldThrowException_WhenEmailIsInvalid()
         {
             // Arrange
+            var name = new Name("");
+            var correo = new Email("old@email.com");
+            var password = new PasswordHash("123456");
             var user = new User(
-                "Ana",
-                "old@mail.com",
-                "123"
+                name,
+                correo,
+                password
             );
 
             // Act
-            var act = () => user.UpdateEmailUser("invalid");
+            var act = () => user.UpdateEmailUser(correo);
 
             // Assert
             act.Should()

@@ -1,31 +1,31 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using FluentValidation;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
 using PruebasApiSolid.Application.Common;
 
 namespace PruebasApiSolid.Extensions
 {
-    public static class ApiBehaviorExtensions
+    public class ValidationExceptionFilter : IExceptionFilter
     {
-        public static IServiceCollection AddApiBehavior(this IServiceCollection services)
+        public void OnException(ExceptionContext context)
         {
-            services.Configure<ApiBehaviorOptions>(options =>
+            if (context.Exception is ValidationException ex)
             {
-                options.InvalidModelStateResponseFactory = context =>
-                {
-                    var errors = context.ModelState
-                        .Where(x => x.Value.Errors.Any())
-                        .Select(x => new
-                        {
-                            Field = x.Key,
-                            Errors = x.Value.Errors.Select(e => e.ErrorMessage)
-                        });
+                var errors = ex.Errors
+                    .GroupBy(e => e.PropertyName)
+                    .Select(g => new
+                    {
+                        Field = g.Key,
+                        Errors = g.Select(e => e.ErrorMessage)
+                    });
 
-                    return new BadRequestObjectResult(
-                        ApiResponse<object>.Fail("Errores de validación", errors)
-                    );
-                };
-            });
+                context.Result = new BadRequestObjectResult(
+                    ApiResponse<object>.Fail("Errores de validación", errors)
+                );
 
-            return services;
+                context.ExceptionHandled = true;
+            }
         }
     }
+
 }

@@ -23,14 +23,15 @@ namespace PruebasApiSolid.Application.Users.Commands.UpdateUser
             if (user == null) 
               return Result<ResponseUser>.Failure("Usuario no existe");
 
-            user.UpdateEmailUser(command.Email);
+            var email = new Email(command.Email);
+            user.UpdateEmailUser(email);
 
             await _userRepository.UpdateUser(user);
 
             var response = new ResponseUser
             {
-                Email = user.Email,
-                Name = user.Name
+                Email = user.Email.Value,
+                Name = user.Name.Value
             };
 
             return Result<ResponseUser>.Success(response);

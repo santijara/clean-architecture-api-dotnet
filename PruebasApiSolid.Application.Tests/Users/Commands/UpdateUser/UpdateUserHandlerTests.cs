@@ -53,7 +53,10 @@ namespace PruebasApiSolid.Application.Tests.Users.Commands.UpdateUser
         public async Task Handle_ShouldUpdateEmail_WhenUserExists()
         {
             // Arrange
-            var user = new User("Juan", "old@email.com", "123456");
+            var name = new Name("Juan");
+            var correo = new Email("old@email.com");
+            var password = new PasswordHash("123456");
+            var user = new User(name, correo, password);
 
             var command = new UpdateUserCommand(
                 Guid.NewGuid(),

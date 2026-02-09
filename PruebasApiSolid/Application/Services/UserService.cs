@@ -25,8 +25,8 @@ namespace PruebasApiSolid.Application.Services
 
              var response = new ResponseUser
              {
-                 Name = user.Name,
-                 Email = user.Email,
+                 Name = user.Name.Value,
+                 Email = user.Email.Value,
              };
 
             return Result<ResponseUser>.Success(response);
